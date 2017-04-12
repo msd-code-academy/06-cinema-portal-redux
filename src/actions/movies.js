@@ -16,10 +16,11 @@ const movieFailed = (error) => ({
 
 export const getMovie = (movieId) => {
   return (dispatch) => {
-    dispatch(movieStart())
+    dispatch(movieStart());
+    
     axios.get(`movies/${movieId}`).then(
       (response) => dispatch(movieSuccess(response.data)),
-      (error) => movieFailed(error)
+      (error) => dispatch(movieFailed(error))
     );
   }
-}
+};
