@@ -7,7 +7,6 @@ Simple educational app for practising React.js fundamentals
 
 Implement all TODOs in the code.
 
-- Implement login form to enable user to log-in
 - User should be able to buy tickets only if he/she is logged
 - Logged user can see all orders
 
