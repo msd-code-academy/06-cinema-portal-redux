@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { showLogin, closeLogin } from '../actions/login';
+import { login } from '../actions/login';
 import {
   HashRouter as Router,
   Route,
@@ -14,6 +14,23 @@ import PurchasePage from './../components/PurchasePage';
 import './App.css';
 
 class App extends Component {
+  constructor (props) {
+    super(props);
+
+    this.handleShowLogin = this.handleShowLogin.bind(this);
+    this.handleCloseLogin = this.handleCloseLogin.bind(this);
+
+    this.state = {showLogin: false};
+  }
+
+  handleShowLogin () {
+    this.setState({showLogin: true});
+  }
+
+  handleCloseLogin () {
+    this.setState({showLogin: false});
+  }
+
   getMenuItem(path, label, isHeader = false) {
     return ({match}) => {
       return (
@@ -29,7 +46,7 @@ class App extends Component {
 
   renderLoginButton () {
     return (
-      <Button primary onClick={this.props.onLoginShow}>Login</Button>
+      <Button primary onClick={this.handleShowLogin}>Login</Button>
     );
   }
 
@@ -39,15 +56,16 @@ class App extends Component {
 
   render() {
     const {
-      user,
-      showLogin,
-      onCloseLogin
+      user
     } = this.props;
+    const {
+      showLogin
+    } = this.state;
 
     return (
       <Router>
         <div>
-          {showLogin && <LoginDialog onClose={onCloseLogin} />}
+          {showLogin && <LoginDialog onClose={this.handleCloseLogin} />}
           <Menu>
             <Route
               exact
@@ -70,13 +88,11 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.userIdentity,
-  showLogin: state.loginForm.showLogin
+  user: state.userIdentity
 });
 
 const mapDispatchToProps = {
-  onLoginShow: showLogin,
-  onCloseLogin: closeLogin
+  onLogin: login
 };
 
 export default connect(
