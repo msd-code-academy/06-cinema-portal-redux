@@ -10,9 +10,10 @@ import {
   Dimmer,
   Loader
 } from 'semantic-ui-react';
+import { connect } from 'react-redux'
+import { getMovie } from '../actions/movies'
 import BuyButton from './buttons/BuyButton';
 import Price from './utils/Price';
-import axios from './../api/axios';
 
 class PurchasePage extends Component {
   constructor (props) {
@@ -22,24 +23,13 @@ class PurchasePage extends Component {
 
     // TODO 2: use mapStateToProps function from Redux to pass data into props instead of state
     this.state = {
-      noOfTickets: 1,
-      movie: null,
-      isLoading: false
+      noOfTickets: 1
     };
   }
 
   componentDidMount () {
-    this.setState({isLoading: true});
-
     const movieId = this.props.match.params.id;
-    const onSuccess = (response) => {
-      this.setState({movie: response.data, isLoading: false});
-    };
-
-    /*
-     TODO 1: call Redux action instead of performing AJAX call directly in the component
-     */
-    axios.get(`movies/${movieId}`).then(onSuccess);
+    this.props.getMovie(movieId)
   }
 
   handleChange (e) {
@@ -52,7 +42,7 @@ class PurchasePage extends Component {
   }
 
   getImageSrc () {
-    const {movie} = this.state;
+    const {movie} = this.props;
 
     if (movie) {
       return movie.image;
@@ -62,7 +52,7 @@ class PurchasePage extends Component {
   }
 
   getDescription () {
-    const {movie} = this.state;
+    const {movie} = this.props;
 
     if (movie) {
       return movie.description;
@@ -76,9 +66,11 @@ class PurchasePage extends Component {
 
   render () {
     const {
-      noOfTickets,
       isLoading,
       movie
+    } = this.props
+    const {
+      noOfTickets
     } = this.state;
     let loadingIndicator = null;
 
@@ -136,4 +128,17 @@ PurchasePage.propTypes = {
   }).isRequired
 };
 
-export default PurchasePage;
+const mapStateToProps = (state) => ({
+  isLoading: state.movies.isLoading,
+  movie: state.movies.movie,
+  error: state.movies.error,
+})
+
+const mapDispatchToProps = {
+  getMovie
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PurchasePage);
