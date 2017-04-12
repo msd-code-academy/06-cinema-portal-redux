@@ -30,7 +30,7 @@ app.use(cookieSession({
 }));
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || origin.includes('localhost')) {
+    if (!origin || origin.includes('localhost') || origin.includes('chrome-extension')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed origin!'));

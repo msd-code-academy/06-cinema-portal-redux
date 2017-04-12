@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import MovieItem from './MovieItem';
 import {Item, Container, Message, Button, Grid} from 'semantic-ui-react';
-import axios from './api/axios';
+import axios from './../api/axios';
 
 class MovieList extends Component {
   constructor (props) {

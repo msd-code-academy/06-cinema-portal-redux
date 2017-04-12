@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react';
 import BuyButton from './buttons/BuyButton';
 import Price from './utils/Price';
-import axios from './api/axios';
+import axios from './../api/axios';
 
 class PurchasePage extends Component {
   constructor (props) {
