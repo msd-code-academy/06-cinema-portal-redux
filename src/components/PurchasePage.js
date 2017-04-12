@@ -20,6 +20,7 @@ class PurchasePage extends Component {
 
     this.handleChange = this.handleChange.bind(this);
 
+    // TODO 2: use mapStateToProps function from Redux to pass data into props instead of state
     this.state = {
       noOfTickets: 1,
       movie: null,
@@ -36,8 +37,7 @@ class PurchasePage extends Component {
     };
 
     /*
-     TODO:
-     - try to handle "404 Not found" optionally in case the movie is not found
+     TODO 1: call Redux action instead of performing AJAX call directly in the component
      */
     axios.get(`movies/${movieId}`).then(onSuccess);
   }
@@ -47,7 +47,7 @@ class PurchasePage extends Component {
   }
 
   handleBuy () {
-    // TODO call rest api (POST /orders) to save order
+    // TODO 3: call Redux action that calls REST API (POST /orders) to save order
     // then you can redirect to homepage by calling this.props.history.push('/');
   }
 
