@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { login } from '../actions/login';
+import { login, logout } from '../actions/login';
 import {
   HashRouter as Router,
   Route,
@@ -19,6 +19,7 @@ class App extends Component {
 
     this.handleShowLogin = this.handleShowLogin.bind(this);
     this.handleCloseLogin = this.handleCloseLogin.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {showLogin: false};
   }
@@ -29,6 +30,12 @@ class App extends Component {
 
   handleCloseLogin () {
     this.setState({showLogin: false});
+  }
+
+  handleLogin (credentials) {
+    this.setState({showLogin: false});
+
+    this.props.onLogin(credentials);
   }
 
   getMenuItem(path, label, isHeader = false) {
@@ -51,7 +58,15 @@ class App extends Component {
   }
 
   renderUserInfo () {
-    return null;
+    return (
+      <span>
+        <span>{this.props.user.username}</span>
+        <em
+          style={{cursor: 'pointer', marginLeft: '5px', display: 'inline-block'}}
+          onClick={this.props.onLogOut}
+        >(logout)</em>
+      </span>
+    );
   }
 
   render() {
@@ -65,7 +80,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          {showLogin && <LoginDialog onClose={this.handleCloseLogin} />}
+          {showLogin && <LoginDialog onClose={this.handleCloseLogin} onSubmit={this.handleLogin} />}
           <Menu>
             <Route
               exact
@@ -92,7 +107,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  onLogin: login
+  onLogin: login,
+  onLogOut: logout
 };
 
 export default connect(
