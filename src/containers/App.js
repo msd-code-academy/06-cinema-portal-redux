@@ -1,39 +1,19 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { showLogin, closeLogin } from '../actions/login';
 import {
   HashRouter as Router,
   Route,
   Link
 } from 'react-router-dom';
 import {Menu, Button} from 'semantic-ui-react';
-import MovieList from './MovieList';
-import Checkout from './Checkout';
-import PurchasePage from './PurchasePage';
+import LoginDialog from './../components/LoginDialog';
+import MovieList from './../components/MovieList';
+import Checkout from './../components/Checkout';
+import PurchasePage from './../components/PurchasePage';
 import './App.css';
-import axios from './api/axios';
 
 class App extends Component {
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      user: null
-    };
-  }
-
-  componentDidMount () {
-    /*
-      TODO this login mechanism looks weird, try to implement login form
-     */
-    const payload = {
-      username: 'john',
-      password: 'abc'
-    };
-
-    axios.post('/login', payload).then(
-      (response) => this.setState({user: payload})
-    );
-  }
-
   getMenuItem(path, label, isHeader = false) {
     return ({match}) => {
       return (
@@ -47,10 +27,27 @@ class App extends Component {
     };
   }
 
+  renderLoginButton () {
+    return (
+      <Button primary onClick={this.props.onLoginShow}>Login</Button>
+    );
+  }
+
+  renderUserInfo () {
+    return null;
+  }
+
   render() {
+    const {
+      user,
+      showLogin,
+      onCloseLogin
+    } = this.props;
+
     return (
       <Router>
         <div>
+          {showLogin && <LoginDialog onClose={onCloseLogin} />}
           <Menu>
             <Route
               exact
@@ -61,7 +58,7 @@ class App extends Component {
               path='/checkout'
               children={this.getMenuItem('/checkout', 'Checkout')}
             />
-            <Menu.Item position='right'><Button primary>Login</Button></Menu.Item>
+            <Menu.Item position='right'>{user ? this.renderUserInfo() : this.renderLoginButton()}</Menu.Item>
           </Menu>
           <Route exact path='/' component={MovieList}/>
           <Route path='/checkout' render={(props) => <Checkout user={this.state.user} />} />
@@ -72,4 +69,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  user: state.userIdentity,
+  showLogin: state.loginForm.showLogin
+});
+
+const mapDispatchToProps = {
+  onLoginShow: showLogin,
+  onCloseLogin: closeLogin
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
