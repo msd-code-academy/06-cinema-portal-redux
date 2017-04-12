@@ -14,24 +14,10 @@ class Root extends Component {
   constructor (props) {
     super(props);
 
-    this.handleShowLogin = this.handleShowLogin.bind(this);
-    this.handleCloseLogin = this.handleCloseLogin.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-
-    this.state = {showLogin: false};
-  }
-
-  handleShowLogin () {
-    this.setState({showLogin: true});
-  }
-
-  handleCloseLogin () {
-    this.setState({showLogin: false});
   }
 
   handleLogin (credentials) {
-    this.setState({showLogin: false});
-
     this.props.onLogin(credentials);
   }
 
@@ -50,7 +36,7 @@ class Root extends Component {
 
   renderLoginButton () {
     return (
-      <Button primary onClick={this.handleShowLogin}>Login</Button>
+      <Button primary onClick={this.props.onShowLoginForm}>Login</Button>
     );
   }
 
@@ -68,16 +54,18 @@ class Root extends Component {
 
   render() {
     const {
-      user
+      user,
+      showLoginForm
     } = this.props;
-    const {
-      showLogin
-    } = this.state;
 
     return (
       <Router>
         <div>
-          {showLogin && <LoginDialog onClose={this.handleCloseLogin} onSubmit={this.handleLogin} />}
+          {showLoginForm && <LoginDialog
+            onClose={this.props.onCloseLoginForm}
+            onSubmit={this.handleLogin}
+            error={this.props.loginError}
+          />}
           <Menu>
             <Route
               exact
@@ -91,7 +79,7 @@ class Root extends Component {
             <Menu.Item position='right'>{user ? this.renderUserInfo() : this.renderLoginButton()}</Menu.Item>
           </Menu>
           <Route exact path='/' component={MovieList}/>
-          <Route path='/checkout' render={(props) => <Checkout user={this.state.user} />} />
+          <Route path='/checkout' render={(props) => <Checkout user={this.props.user} />} />
           <Route path='/movie/:id/buy' component={PurchasePage} />
         </div>
       </Router>

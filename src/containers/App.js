@@ -1,14 +1,23 @@
 import {connect} from 'react-redux';
-import {login, logout} from '../actions/login';
+import {
+  login,
+  logout,
+  closeLoginForm,
+  showLoginForm
+} from '../actions/login';
 import Root from './../components/Root';
 
 const mapStateToProps = (state) => ({
-  user: state.userIdentity
+  user: state.login.user,
+  showLoginForm: state.login.showLoginForm,
+  loginError: state.login.loginError
 });
 
 const mapDispatchToProps = {
   onLogin: login,
-  onLogOut: logout
+  onLogOut: logout,
+  onCloseLoginForm: closeLoginForm,
+  onShowLoginForm: showLoginForm
 };
 
 export default connect(

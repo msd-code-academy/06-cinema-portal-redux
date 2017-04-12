@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Button, Modal, Header, Form} from 'semantic-ui-react';
+import {Button, Modal, Header, Form, Message} from 'semantic-ui-react';
 
 class LoginDialog extends Component {
   constructor (props) {
@@ -35,6 +35,7 @@ class LoginDialog extends Component {
         <Header icon='user' content='Log-in'/>
         <Modal.Content>
           <div>
+            {this.props.error && <Message color='red'>{this.props.error}</Message>}
             <Form>
               <Form.Field>
                 <label>Username</label>
@@ -65,7 +66,8 @@ class LoginDialog extends Component {
 
 LoginDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.string
 };
 
 export default LoginDialog;
